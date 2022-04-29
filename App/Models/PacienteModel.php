@@ -13,10 +13,21 @@ use App\Config\Database;
  {
     private static $table = 'pacientes';
     
-    public static function select($id)
+    public static function select($pid)
     {
         $database = new Database;
         $db = $database->connect();
+
+        $sql = 'SELECT * FROM '.self::$table . ' WHERE pid = :pid';
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':pid', $pid);
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0) {
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            throw new \Exception("Nenhum paciente encontrado");
+        }
 
 
     }
@@ -24,6 +35,16 @@ use App\Config\Database;
     {
         $database = new Database;
         $db = $database->connect();
+
+        $sql = 'SELECT * FROM '.self::$table;
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+          return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+          throw new \Exception("No product found!");
+        }
     }
     public static function insert(PacienteClass $paciente)
     {
