@@ -11,7 +11,7 @@ function NavbarPartial() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
           <Nav.Link href='/'>Home</Nav.Link>
-          <Nav.Link href='pacientes'>Pacientes</Nav.Link>
+          <Nav.Link href='/pacientes'>Pacientes</Nav.Link>
           </Nav>
           <NavDropdown id="basic-nav-dropdown" className='d-flex ms-auto' align={{lg:'end'}} menuVariant='dark' style={{color:'black'}}>
             <NavDropdown.Item href="#action/3.1">Another action</NavDropdown.Item>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Button, Card, Col, Form, FormControl, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Form, FormControl, Row } from 'react-bootstrap';
 import Patient from './Patient';
 
 function List() {
@@ -28,7 +28,7 @@ function List() {
         {error && <Alert>{error}</Alert>}
         <div className='d-flex justify-content-center my-3'>
             <Form className='d-inline-flex' id='search-patient-form'>
-                <Button onClick={handleSubmitSearchPatient}>Buscar</Button>
+                <Button className='me-2' onClick={handleSubmitSearchPatient}>Buscar</Button>
                 <FormControl ref={searchRef} style={{minWidth:'30vw'}}/>
             </Form>
         </div>
@@ -39,7 +39,7 @@ function List() {
                 </Col>
             ))}
         </Row>
-        <Button style={{width:'30vw', alignSelf:'center'}}>Adicionar Paciente</Button>
+        <Button variant='success' style={{width:'30vw', alignSelf:'center'}} href='pacientes/add'>Adicionar Paciente</Button>
     </div>
   )
 }

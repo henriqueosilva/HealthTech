@@ -1,37 +1,60 @@
 import React, { useState } from 'react'
-import { FloatingLabel, Form } from 'react-bootstrap';
+import { Button, FloatingLabel, Form } from 'react-bootstrap';
 
-const PatientForm = React.forwardRef((props,ref) => {
-    const { fNameRef, lNameRef, cnsRef, bdayRef } = ref;
-    const [valid, setValid] = useState(false);
-    const [invalidCns, setInvalidCns] = useState('');
-    function filterLength(e, maxlength=12) {
-        if(e.target.value.length >= maxlength) e.target.value = e.target.value.substr(0,maxlength);
-    }
-    function filterNumber(e){
-        e.target.value = e.target.value.replace(/[^\d]/g, '')
-    }
-    function handleCNSInput(e){
-        filterNumber(e);
-        filterLength(e, 15);
-        if(e.target.value.length === 15) {
-            let cns = e.target.value;
-            if(!isCNSValid(cns)){
-                setInvalidCns('Cartão SUS inválido')
-                setValid(true)
-            }
-            const soma = somaPonderada(cns)
-            if(!((soma % 11) === 0)) {
-                setInvalidCns('Cartão SUS inválido')
-                setValid(true)
-            } else {
-                setValid(false)
-            }
-        }
-    }
+function PatientForm() {
+    const [errors, setErrors] = useState({})
+    const [form, setForm] = useState({
+        fName: '',
+        lName: '',
+        cns: '',
+        bday: '',
+    });
+
     function isCNSValid(cns){
-        if((cns.match(/([1-2]\d{10}00[0-1]\d)/g)) || cns.match(/([7-9]\d{14})/g)) return true;
+        if((cns.match(/([1-2]\d{10}00[0-1]\d)/g)) || cns.match(/([7-9]\d{14})/g)) {
+        const soma = somaPonderada(cns);
+        if(!((soma % 11) === 0)) {
+            return true;
+        } else {
+            return false;
+        }
+        };
         return false;
+    }
+    function handleSubmit(e){
+        e.preventDefault();
+        const newErrors = findFormErrors()
+        if (Object.keys(newErrors).length > 0){
+            setErrors(newErrors)
+            return;
+        }
+        //send form to insert api uri
+        console.log(form)
+    }
+    const findFormErrors = () => {
+        const { fName, lName, cns, bday } = form;
+        const newErrors = {};
+
+        if (!fName || fName === '' || fName.length <3) newErrors.fName = 'Nome Inválido!';
+        if (!lName || lName === '') newErrors.lName = 'Sobrenome inválido!';
+        if (!cns || cns === '') newErrors.cns = 'CNS deve ser preenchida!';
+        else if (cns.length < 15) newErrors.cns = 'CNS muito curta!';
+        else if (cns.length > 15) newErrors.cns = 'CNS muito longa!';
+        else if (isCNSValid(cns)) newErrors.cns = 'CNS inválida!'
+        if (!bday || bday.length === '') newErrors.bday = 'Data de nascimento inválida!';
+
+        return newErrors;
+
+    }
+    function setField(field, value) {
+        setForm({
+            ...form,
+            [field]: value
+        })
+        if( !!errors[field]) setErrors({
+            ...errors,
+            [field]: null
+        })
     }
     function somaPonderada(cns){
         cns = cns.split("")
@@ -43,29 +66,33 @@ const PatientForm = React.forwardRef((props,ref) => {
         return soma;
     }
   return (
-      <>
+      <Form className='d-flex flex-column' id='register-patient-form' onSubmit={handleSubmit}>
         <FloatingLabel controlId='fName' label='Primeiro Nome'>
-            <Form.Control type='text' placeholder='Primeiro Nome' ref={fNameRef} onChange={filterLength} required/>
+            <Form.Control type='text' placeholder='Primeiro Nome' onChange={e => setField('fName', e.target.value)} isInvalid={!!errors.fName}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
-            <Form.Control.Feedback type='invalid'>Preencha o campo do Primeiro Nome</Form.Control.Feedback>
+            <Form.Control.Feedback type='invalid'>{ errors.fName }</Form.Control.Feedback>
         </FloatingLabel>
         <FloatingLabel controlId='lName' label='Sobrenome'>
-            <Form.Control type='text' placeholder='Sobrenome' ref={lNameRef} onChange={filterLength} required/>
+            <Form.Control type='text' placeholder='Sobrenome' onChange={e => setField('lName', e.target.value)} isInvalid={!!errors.lName}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
-            <Form.Control.Feedback type='invalid'>Preencha o campo do Sobrenome</Form.Control.Feedback>
+            <Form.Control.Feedback type='invalid'>{ errors.lName }</Form.Control.Feedback>
         </FloatingLabel>
         <FloatingLabel controlId='cns' label='CNS'>
-            <Form.Control type='text' placeholder='CNS' ref={cnsRef} onChange={handleCNSInput} isInvalid={valid} required/>
+            <Form.Control type='text' placeholder='CNS' onChange={e => setField('cns', e.target.value)} isInvalid={!!errors.cns}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
-            <Form.Control.Feedback type='invalid'>{invalidCns}</Form.Control.Feedback>
+            <Form.Control.Feedback type='invalid'>{ errors.cns }</Form.Control.Feedback>
         </FloatingLabel>
-        <FloatingLabel controlId='bday' label='Nacimento'>
-            <Form.Control type='date' placeholder='Nacimento' ref={bdayRef} onChange={filterLength} required/>
+        <FloatingLabel controlId='bday' label='Nascimento'>
+            <Form.Control type='date' placeholder='Nascimento' onChange={e => setField('bday', e.target.value)} isInvalid={!!errors.bday}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
-            <Form.Control.Feedback type='invalid'>Preencha o campo do Nascimento</Form.Control.Feedback>
+            <Form.Control.Feedback type='invalid'>{ errors.bday }</Form.Control.Feedback>
         </FloatingLabel>
-      </>
+        <div className='my-3' style={{alignSelf:'center'}}>
+            <Button className='me-2' variant='success' type='submit' form='register-patient-form'>Cadastrar Paciente</Button>
+            <Button href='/pacientes'>Voltar</Button>
+        </div>
+      </Form>
   )
-})
+}
 
 export default PatientForm
