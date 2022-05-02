@@ -7,7 +7,7 @@ function Landing() {
   return (
     <>
         <NavbarPartial />
-        <Container className='fluid' style={{marginLeft:'25px'}}>
+        <Container fluid className='d-flex justify-content-center'>
             <Outlet />
         </Container>
     </>
