@@ -26,7 +26,7 @@ use App\Config\Database;
         if($stmt->rowCount() > 0) {
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
-            throw new \Exception("Nenhum paciente encontrado");
+            throw new \Exception("Nenhum paciente encontrado!");
         }
 
 
@@ -43,7 +43,7 @@ use App\Config\Database;
         if ($stmt->rowCount() > 0) {
           return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
-          throw new \Exception("No product found!");
+          throw new \Exception("Nenhum paciente encontrado!");
         }
     }
     public static function insert(PacienteClass $paciente)
