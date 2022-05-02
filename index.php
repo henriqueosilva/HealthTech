@@ -4,7 +4,8 @@
  * Index entry point for backend api
  */
 
- //header('Content-Type: application/json');
+ header('Content-Type: application/json');
+ header('Access-Control-Allow-Origin: *');
  date_default_timezone_set('America/Bahia');
  require './vendor/autoload.php';
 
