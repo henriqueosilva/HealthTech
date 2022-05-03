@@ -11,7 +11,7 @@ use App\Config\Database;
 
  class PacienteModel
  {
-    private static $table = 'pacientes';
+    private static $table = 'patients';
     
     public static function select($pid)
     {
