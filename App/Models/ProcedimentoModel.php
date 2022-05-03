@@ -55,14 +55,12 @@ use App\Config\Database;
         $sql = 'INSERT INTO '.self::$table .'(paciente_id, created_at, updated_at) 
         VALUES (:paciente_id, :created_at, :updated_at)';
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':paciente_id', $atendimento->getPID());
+        $stmt->bindValue(':paciente_id', $procedimento->getPID());
         $stmt->bindValue(':created_at', $current_time);
         $stmt->bindValue(':updated_at', $current_time);
 
 
         $stmt->execute();
-        $last_id = $stmt->lastInsertId();
-        echo(var_dump(($last_id)));
         if ($stmt->rowCount() > 0) {
             return 'Paciente inserido com sucesso!';
         } else {
