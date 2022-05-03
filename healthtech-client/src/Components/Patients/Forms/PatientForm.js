@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'
 
-function PatientForm() {
+function PatientForm(props) {
+    const navigate = useNavigate()
     const [errors, setErrors] = useState({})
     const [form, setForm] = useState({
         fName: '',
@@ -28,8 +30,13 @@ function PatientForm() {
             setErrors(newErrors)
             return;
         }
-        //send form to insert api uri
-        console.log(form)
+        props.registerPatient(form)
+        .then(res => {
+            if(res.status === 'error') setErrors({...errors, registerError:res.data});
+            if(res.status === 'success') {
+                navigate('/pacientes')
+            } //call function to raise toast to register patient
+        })
     }
     const findFormErrors = () => {
         const { fName, lName, cns, bday } = form;

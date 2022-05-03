@@ -9,7 +9,7 @@ function List() {
 
     function getPatients() {
         setError('')
-        fetch(`http://${process.env.REACT_APP_API_URI}/api/paciente`)
+        fetch(`http://${process.env.REACT_APP_API_URI}/api/patient`)
         .then(res => res.json())
         .then(res => {
             if(res.status === 'error') setError(res.data);
