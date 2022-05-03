@@ -6,12 +6,12 @@
 
  namespace App\Models;
 
-use App\Classes\PacienteClass;
+use App\Classes\ProcedimentoClass;
 use App\Config\Database;
 
- class PacienteModel
+ class ProcedimentoModel
  {
-    private static $table = 'pacientes';
+    private static $table = 'procedimentos';
     
     public static function select($pid)
     {
@@ -46,28 +46,31 @@ use App\Config\Database;
           throw new \Exception("Nenhum paciente encontrado!");
         }
     }
-    public static function insert(PacienteClass $paciente)
+    public static function insert(ProcedimentoClass $procedimento)
     {
         $database = new Database;
         $db = $database->connect();
         $current_time = date('Y-m-d H:i:s');
 
-        $sql = 'INSERT INTO '.self::$table .'(fName, lName, cns, nascimento, created_at, updated_at) 
-        VALUES (:fName, :lName, :cns, :nascimento, :created_at, :updated_at)';
+        $sql = 'INSERT INTO '.self::$table .'(paciente_id, created_at, updated_at) 
+        VALUES (:paciente_id, :created_at, :updated_at)';
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':fName', $paciente->getfName());
-        $stmt->bindValue(':lName', $paciente->getlName());
-        $stmt->bindValue(':cns', $paciente->getCNS());
-        $stmt->bindValue(':nascimento', $paciente->getNascimento());
+        $stmt->bindValue(':paciente_id', $atendimento->getPID());
         $stmt->bindValue(':created_at', $current_time);
         $stmt->bindValue(':updated_at', $current_time);
 
 
         $stmt->execute();
+        $last_id = $stmt->lastInsertId();
+        echo(var_dump(($last_id)));
         if ($stmt->rowCount() > 0) {
             return 'Paciente inserido com sucesso!';
         } else {
             throw new \Exception('Falha ao inserir o paciente!');
         }
+    }
+    private function insert_atendimento(AtendimentoClass $atendimento)
+    {
+        $database = new Database;
     }
  }

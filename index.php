@@ -4,7 +4,7 @@
  * Index entry point for backend api
  */
 
- header('Content-Type: application/json');
+ //header('Content-Type: application/json');
  header('Access-Control-Allow-Origin: *');
  date_default_timezone_set('America/Bahia');
  require './vendor/autoload.php';
@@ -14,7 +14,6 @@
      exit;
  }
  $url = explode('/', $_GET['url']);
-
  if ($url[0] != 'api') {
      http_response_code(404);
      echo json_encode(array('status'=>'error', 'data'=>'Api not typed'));
@@ -29,6 +28,7 @@
 
 
  $service = 'App\Services\\'.ucfirst($url[0]).'Service';
+ 
  array_shift($url);
 
  $method = strtolower($_SERVER['REQUEST_METHOD']);

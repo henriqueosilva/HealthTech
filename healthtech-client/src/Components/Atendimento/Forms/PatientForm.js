@@ -21,6 +21,7 @@ function PatientForm(props) {
     return false;
 }
 function handleSubmit(e){
+  props.nextStep()
   e.preventDefault();
   const newErrors = findFormErrors()
   if (Object.keys(newErrors).length > 0){
@@ -87,7 +88,7 @@ function somaPonderada(cns){
         </FloatingLabel>
         <div className='my-3' style={{alignSelf:'center'}}>
             <Button className='me-2' variant='success' type='submit' form='register-patient-form'>Proximo</Button>
-            <Button href='/atendimento/add'>Cancelar</Button>
+            <Button href='/pacientes'>Cancelar</Button>
         </div>
       </Form>
   )

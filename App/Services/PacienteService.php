@@ -17,7 +17,7 @@
  {
      public function get($pid = null)
      {
-        if(!$pid){
+         if(!$pid){
             return PacienteModel::selectAll();
         } else {
             return PacienteModel::select($pid);
