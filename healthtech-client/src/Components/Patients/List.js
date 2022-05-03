@@ -3,17 +3,17 @@ import { Alert, Button, Col, Form, FormControl, Row } from 'react-bootstrap';
 import Patient from './Patient';
 
 function List() {
-    const [patientList, setPatientList] = useState([1,2,3,4,5,6,7,8,9,10]);
+    const [patientList, setPatientList] = useState([]);
     const [error, setError] = useState('');
     const searchRef = useRef('');
 
     function getPatients() {
         setError('')
-        fetch(`http://${process.env.REACT_APP_API_URI}/api/patient`)
+        fetch(`http://${process.env.REACT_APP_API_URI}/api/paciente`)
         .then(res => res.json())
         .then(res => {
             if(res.status === 'error') setError(res.data);
-            if(res.status === 'sucess') setPatientList(res.data);
+            if(res.status === 'success') setPatientList(res.data);
         })
     }
     function handleSubmitSearchPatient(e) {
@@ -34,7 +34,7 @@ function List() {
         </div>
         <Row className='row-cols-3 my-5'>
             {patientList?.map(patient => (
-                <Col className='mb-3' key={patient.id}>
+                <Col className='mb-3' key={patient.pid}>
                     <Patient patient={patient}/>
                 </Col>
             ))}
