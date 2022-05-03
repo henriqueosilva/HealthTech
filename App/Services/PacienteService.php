@@ -31,7 +31,7 @@
             throw new \Exception("Metodo não consta na request");
         }
         if ($paciente_array['method'] === 'register') {
-            $paciente = new PacienteClass($paciente_array);
+            $paciente = new PacienteClass($paciente_array['patient']);
 
             $paciente->save();
             return $paciente->getRes();

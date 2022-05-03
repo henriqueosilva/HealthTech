@@ -22,7 +22,7 @@
          $this->fName = $paciente_array['fName'];
          $this->lName = $paciente_array['lName'];
          $this->cns = $paciente_array['cns'];
-         $this->nascimento = $paciente_array['nascimento'];
+         $this->nascimento = $paciente_array['bday'];
      }
      public function getID()
      {
