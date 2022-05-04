@@ -11,13 +11,13 @@
  class AtendimentoClass
  {
      private string $pid;
-     private array $procedimentos;
+     private string $origin;
      private string $res;
 
      public function __construct(array $atendimento_array)
      {
          $this->pid = $atendimento_array['pid'];
-         $this->procedimentos = $atendimento_array['procedimentos'];
+         $this->origin = $atendimento_array['origin'];
      }
      public function getPID()
      {
@@ -28,9 +28,9 @@
          $this->pid = $pid;
          return $this->pid;
      }
-     public function getProcedimentos()
+     public function getOrigin()
      {
-         return $this->procedimentos ;
+         return $this->origin ;
      }
      public function save()
      {

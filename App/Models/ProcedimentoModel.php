@@ -48,17 +48,19 @@ use App\Config\Database;
     }
     public static function insert(ProcedimentoClass $procedimento)
     {
+        echo(var_dump(($procedimento)));
         $database = new Database;
         $db = $database->connect();
         $current_time = date('Y-m-d H:i:s');
 
-        $sql = 'INSERT INTO '.self::$table .'(paciente_id, created_at, updated_at) 
-        VALUES (:paciente_id, :created_at, :updated_at)';
+        $sql = 'INSERT INTO '.self::$table .'(atendimento_id, description, modality, created_at, updated_at) 
+        VALUES (:atendimento_id, :description, :modality, :created_at, :updated_at)';
         $stmt = $db->prepare($sql);
-        $stmt->bindValue(':paciente_id', $procedimento->getPID());
+        $stmt->bindValue(':atendimento_id', $procedimento->getAtendimentoID());
+        $stmt->bindValue(':description', $procedimento->getDescription());
+        $stmt->bindValue(':modality', $procedimento->getModality());
         $stmt->bindValue(':created_at', $current_time);
         $stmt->bindValue(':updated_at', $current_time);
-
 
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
@@ -66,9 +68,5 @@ use App\Config\Database;
         } else {
             throw new \Exception('Falha ao inserir o paciente!');
         }
-    }
-    private function insert_atendimento(AtendimentoClass $atendimento)
-    {
-        $database = new Database;
     }
  }

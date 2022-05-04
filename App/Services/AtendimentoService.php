@@ -8,6 +8,7 @@
 
  use App\Models\AtendimentoModel;
  use App\Classes\AtendimentoClass;
+ use App\Classes\ProcedimentoClass;
 
 /**
  * Função get para busca de dados, função post para registro de dados
@@ -31,11 +32,13 @@
             throw new \Exception("Metodo não consta na request");
         }
         if ($atendimento_array['method'] === 'register') {
-            $atendimento = new AtendimentoClass($atendimento_array['patient']);
-
+            $atendimento = new AtendimentoClass($atendimento_array['atendimento']);
             $atendimento->save();
-            return $atendimento->getRes();
-            exit;
+            $res = $atendimento->getRes();
+            foreach($atendimento_array['procedimentos'] as $key => $value) {
+                $procedimento = new ProcedimentoClass($value, $res);
+                $procedimento->save();
+            }
         }
      }
  }

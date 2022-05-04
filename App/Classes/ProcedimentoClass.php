@@ -16,14 +16,19 @@
      private string $study_uuid;
      private string $res;
 
-     public function __construct(array $procedimento)
+     public function __construct(array $procedimento, int $atendimento_id)
      {
          $this->description = $procedimento['description'];
          $this->modality = $procedimento['modality'];
+         $this->atendimento_id = $atendimento_id;
      }
      public function getDescription()
      {
          return $this->description;
+     }
+     public function getStudyUUID()
+     {
+         return $this->study_uuid;
      }
      public function setStudyUUID(string $study_uuid)
      {

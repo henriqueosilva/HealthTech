@@ -44,7 +44,7 @@ use App\Config\Database;
         if ($stmt->rowCount() > 0) {
           return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
-          throw new \Exception("Nenhum paciente encontrado!");
+          throw new \Exception("Nenhum atendimento encontrado!");
         }
     }
     public static function insert(AtendimentoClass $atendimento)
@@ -53,25 +53,19 @@ use App\Config\Database;
         $db = $database->connect();
         $current_time = date('Y-m-d H:i:s');
 
-        $sql = 'INSERT INTO '.self::$table .'(paciente_id, created_at, updated_at) 
-        VALUES (:paciente_id, :created_at, :updated_at)';
+        $sql = 'INSERT INTO '.self::$table .'(paciente_id, origin, created_at, updated_at) 
+        VALUES (:paciente_id, :origin, :created_at, :updated_at)';
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':paciente_id', $atendimento->getPID());
+        $stmt->bindValue(':origin', $atendimento->getOrigin());
         $stmt->bindValue(':created_at', $current_time);
         $stmt->bindValue(':updated_at', $current_time);
 
-
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
-            $atendimento_id = $db->lastInsertId();
-            
-            return 'Paciente inserido com sucesso!';
+            return $db->lastInsertId();
         } else {
-            throw new \Exception('Falha ao inserir o paciente!');
+            throw new \Exception('Falha ao inserir o atendimento!');
         }
-    }
-    private function insert_atendimento(AtendimentoClass $atendimento)
-    {
-        $database = new Database;
     }
  }
