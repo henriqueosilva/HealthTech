@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 
 function PatientForm(props) {
@@ -20,14 +20,24 @@ function PatientForm(props) {
     };
     return false;
 }
+function getPastValues(){
+  if(props.atendimento?.patient) {
+    setForm({
+      fName: props.atendimento.patient.fName,
+      lName: props.atendimento.patient.lName,
+      cns: props.atendimento.patient.cns,
+      bday: props.atendimento.patient.bday
+    })
+  }
+}
 function handleSubmit(e){
-  props.nextStep()
   e.preventDefault();
   const newErrors = findFormErrors()
   if (Object.keys(newErrors).length > 0){
-      setErrors(newErrors)
-      return;
+    setErrors(newErrors)
+    return;
   }
+  props.nextStep()
   props.handleAtendimento({patient:form}) //call function to raise toast to register patient
 }
 const findFormErrors = () => {
@@ -64,25 +74,28 @@ function somaPonderada(cns){
   });
   return soma;
 }
+useEffect(()=>{
+  getPastValues();
+},[])
   return (
     <Form className='d-flex flex-column' id='register-patient-form' onSubmit={handleSubmit}>
         <FloatingLabel controlId='fName' label='Primeiro Nome'>
-            <Form.Control type='text' value={form.fName} placeholder='Primeiro Nome' onChange={e => setField('fName', e.target.value)} isInvalid={!!errors.fName}/>
+            <Form.Control type='text' defaultValue={form.fName} placeholder='Primeiro Nome' onChange={e => setField('fName', e.target.value)} isInvalid={!!errors.fName}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
             <Form.Control.Feedback type='invalid'>{ errors.fName }</Form.Control.Feedback>
         </FloatingLabel>
         <FloatingLabel controlId='lName' label='Sobrenome'>
-            <Form.Control type='text' placeholder='Sobrenome' onChange={e => setField('lName', e.target.value)} isInvalid={!!errors.lName}/>
+            <Form.Control type='text' defaultValue={form.lName} placeholder='Sobrenome' onChange={e => setField('lName', e.target.value)} isInvalid={!!errors.lName}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
             <Form.Control.Feedback type='invalid'>{ errors.lName }</Form.Control.Feedback>
         </FloatingLabel>
         <FloatingLabel controlId='cns' label='CNS'>
-            <Form.Control type='text' placeholder='CNS' onChange={e => setField('cns', e.target.value)} isInvalid={!!errors.cns}/>
+            <Form.Control type='text' defaultValue={form.cns} placeholder='CNS' onChange={e => setField('cns', e.target.value)} isInvalid={!!errors.cns}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
             <Form.Control.Feedback type='invalid'>{ errors.cns }</Form.Control.Feedback>
         </FloatingLabel>
         <FloatingLabel controlId='bday' label='Nascimento'>
-            <Form.Control type='date' placeholder='Nascimento' onChange={e => setField('bday', e.target.value)} isInvalid={!!errors.bday}/>
+            <Form.Control type='date' defaultValue={form.bday} placeholder='Nascimento' onChange={e => setField('bday', e.target.value)} isInvalid={!!errors.bday}/>
             <Form.Control.Feedback type='valid'>Preenchido corretamento</Form.Control.Feedback>
             <Form.Control.Feedback type='invalid'>{ errors.bday }</Form.Control.Feedback>
         </FloatingLabel>

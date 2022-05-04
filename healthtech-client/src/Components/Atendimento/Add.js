@@ -3,7 +3,7 @@ import React, { Suspense, useEffect, useState } from 'react'
 function Add() {
   const [error, setError] = useState('');
   const [atendimento, setAtendimento] = useState({});
-  const [step, setStep] = useState();
+  const [step, setStep] = useState(1);
   const PatientForm = React.lazy(()=> import('./Forms/PatientForm'))
   const AddressForm = React.lazy(()=> import('./Forms/AddressForm'))
   const ProcedureForm = React.lazy(()=> import('./Forms/ProcedureForm'))
@@ -22,18 +22,13 @@ function Add() {
   function nextStep(){
     setStep(step => step + 1)
   }
-  useEffect(()=>{
-    setStep(1);
-  },[])
-  console.log(step)
   return (
     <div style={{width:'50vw'}}>
       <Suspense fallback={<div>Carregando...</div>}>
-        {step === 1 ? <PatientForm handleAtendimento={handleAtendimento} prevStep={prevStep} nextStep={nextStep}/> : "" }
-        {step === 2 ? <AddressForm handleAtendimento={handleAtendimento} prevStep={prevStep} nextStep={nextStep}/> : "" }
-        {step === 3 ? <ProcedureForm handleAtendimento={handleAtendimento} prevStep={prevStep} nextStep={nextStep}/> : "" }
+        {step === 1 ? <PatientForm atendimento={atendimento} handleAtendimento={handleAtendimento} prevStep={prevStep} nextStep={nextStep}/> : "" }
+        {step === 2 ? <AddressForm atendimento={atendimento} handleAtendimento={handleAtendimento} prevStep={prevStep} nextStep={nextStep}/> : "" }
+        {step === 3 ? <ProcedureForm atendimento={atendimento} handleAtendimento={handleAtendimento} prevStep={prevStep} nextStep={nextStep}/> : "" }
       </Suspense>
-      
     </div>
   )
 }
